@@ -1,17 +1,17 @@
 package net.rtccloud.helper.listener;
 
-import net.rtccloud.helper.view.CallControls.WeemoCallButton;
+import net.rtccloud.helper.view.CallControls.CallButton;
 
 /**
- * Interface definition for a callback to be invoked when a {@link WeemoCallButton} is clicked.
+ * Interface definition for a callback to be invoked when a {@link CallButton} is clicked.
  * 
  * @author Simon Marquis <simon.marquis@sightcall.com>
  */
 public interface OnCallControlClickListener {
 	/**
-     * Called when a {@link WeemoCallButton} has been clicked.
+     * Called when a {@link CallButton} has been clicked.
      *
 	 * @param button The button that was clicked.
 	 */
-	public void onWeemoCallControlsClick(WeemoCallButton button);
+	public void onCallControlsClick(CallButton button);
 }

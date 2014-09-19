@@ -57,8 +57,6 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	/** Tag to identify the token request */
 	private static final String REQUEST_TOKEN = "token";
 
-	/** The instance used to authenticate */
-	private RtccEngine mWeemo;
 	/** Callback used to dispatch the {@link AuthenticatedEvent} */
 	private OnLoginFragmentListener mListener;
 	/** Request queue containing the token request */
@@ -145,7 +143,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (getActivity() != null && this.mWeemo != null && this.mWeemo.getCurrentCall() != null) {
+		if (getActivity() != null && Rtcc.instance() != null && Rtcc.instance().getCurrentCall() != null) {
 			getActivity().getActionBar().show();
 		}
 	}
@@ -217,19 +215,19 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		onStatusUpdate(getString(R.string.app_name), getString(R.string.msg_authentication), true, true);
 		this.mUserId = this.mUserIdView.getText().toString();
 		if (App.defaultWillUseAuth) {
-			authenticateWeemoAuth();
+			authenticateAuth();
 		} else {
 			authenticatedPoc();
 		}
 	}
 
 	/**
-	 * Login as WeemoAuth mode:<br/>
+	 * Login in auth mode:<br/>
 	 * <b>Warning!</b><br/>
 	 * This token request is only for the sake of simplicity.<br/>
 	 * You should use a secured connection and must already be authenticated to a backend.
 	 */
-	private void authenticateWeemoAuth() {
+	private void authenticateAuth() {
 		String url = App.defaultAuthUrl + "?uid=" + this.mUserId;
 		JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -260,7 +258,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	 */
 	private void authenticatedPoc() {
 		App.breadcrumb("RtccEngine.authenticate(token=%s, userType=%s)", this.mUserId, App.defaultUserType);
-		this.mWeemo.authenticate(getActivity(), this.mUserId, App.defaultUserType);
+		Rtcc.instance().authenticate(getActivity(), this.mUserId, App.defaultUserType);
 	}
 
 	/**
@@ -353,7 +351,6 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	@RtccEventListener
 	public void onConnected(final ConnectedEvent event) {
 		if (event.isSuccess()) {
-			this.mWeemo = Rtcc.instance();
 			authenticate();
 		} else {
 			onStatusUpdate(getString(R.string.app_name), event.getError().description(), false);
@@ -376,7 +373,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 			App.defaultUserID = this.mUserId;
 			this.mDisplayName = this.mDisplayNameView.getText().toString();
 			App.defaultDisplayName = this.mDisplayName;
-			this.mWeemo.setDisplayName(this.mDisplayName);
+			Rtcc.instance().setDisplayName(this.mDisplayName);
 			onStatusUpdate(getString(R.string.app_name), getString(R.string.msg_authenticated), false);
 			if (this.mListener != null) {
 				this.mListener.onAuthenticated();

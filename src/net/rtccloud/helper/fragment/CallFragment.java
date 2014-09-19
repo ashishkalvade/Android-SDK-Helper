@@ -1,5 +1,41 @@
 package net.rtccloud.helper.fragment;
 
+import net.rtccloud.helper.App;
+import net.rtccloud.helper.R;
+import net.rtccloud.helper.controller.CallViewController;
+import net.rtccloud.helper.controller.FloatingWindowController;
+import net.rtccloud.helper.controller.FloatingWindowTouchController;
+import net.rtccloud.helper.controller.FullScreenController;
+import net.rtccloud.helper.controller.ScreenShareController;
+import net.rtccloud.helper.listener.OnCallControlClickListener;
+import net.rtccloud.helper.listener.OnCallFragmentListener;
+import net.rtccloud.helper.listener.OnFullScreenListener;
+import net.rtccloud.helper.util.Ui;
+import net.rtccloud.helper.view.CallControls;
+import net.rtccloud.helper.view.CallControls.CallButton;
+import net.rtccloud.sdk.Call;
+import net.rtccloud.sdk.Call.AudioRoute;
+import net.rtccloud.sdk.Call.CallStatus;
+import net.rtccloud.sdk.Call.VideoProfile;
+import net.rtccloud.sdk.Call.VideoSource;
+import net.rtccloud.sdk.Contact;
+import net.rtccloud.sdk.Rtcc;
+import net.rtccloud.sdk.event.RtccEventListener;
+import net.rtccloud.sdk.event.call.AudioRouteEvent;
+import net.rtccloud.sdk.event.call.FloorListEvent;
+import net.rtccloud.sdk.event.call.ParticipantEvent;
+import net.rtccloud.sdk.event.call.ParticipantListEvent;
+import net.rtccloud.sdk.event.call.ScreenShareInEvent;
+import net.rtccloud.sdk.event.call.ScreenShareInSizeEvent;
+import net.rtccloud.sdk.event.call.ScreenShareOutEvent;
+import net.rtccloud.sdk.event.call.StatusEvent;
+import net.rtccloud.sdk.event.call.VideoInEvent;
+import net.rtccloud.sdk.event.call.VideoInSizeEvent;
+import net.rtccloud.sdk.event.call.VideoOutEvent;
+import net.rtccloud.sdk.event.global.AuthenticatedEvent;
+import net.rtccloud.sdk.view.ScreenShareInFrame;
+import net.rtccloud.sdk.view.VideoInFrame;
+import net.rtccloud.sdk.view.VideoOutPreviewFrame;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,44 +44,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import net.rtccloud.helper.App;
-import net.rtccloud.helper.R;
-import net.rtccloud.helper.controller.CallViewController;
-import net.rtccloud.helper.controller.FloatingWindowController;
-import net.rtccloud.helper.controller.FloatingWindowTouchController;
-import net.rtccloud.helper.controller.FullScreenController;
-import net.rtccloud.helper.controller.ScreenShareController;
-import net.rtccloud.helper.listener.OnCallFragmentListener;
-import net.rtccloud.helper.listener.OnFullScreenListener;
-import net.rtccloud.helper.listener.OnCallControlClickListener;
-import net.rtccloud.helper.util.Ui;
-import net.rtccloud.helper.view.CallControls;
-import net.rtccloud.helper.view.CallControls.WeemoCallButton;
-import net.rtccloud.sdk.Rtcc;
-import net.rtccloud.sdk.Call;
-import net.rtccloud.sdk.Call.AudioRoute;
-import net.rtccloud.sdk.Call.CallStatus;
-import net.rtccloud.sdk.Call.VideoProfile;
-import net.rtccloud.sdk.Call.VideoSource;
-import net.rtccloud.sdk.Contact;
-import net.rtccloud.sdk.RtccEngine;
-import net.rtccloud.sdk.event.RtccEventListener;
-import net.rtccloud.sdk.event.call.AudioRouteEvent;
-import net.rtccloud.sdk.event.call.FloorListEvent;
-import net.rtccloud.sdk.event.call.ParticipantEvent;
-import net.rtccloud.sdk.event.call.ParticipantListEvent;
-import net.rtccloud.sdk.event.call.ScreenShareInEvent;
-import net.rtccloud.sdk.event.call.VideoInEvent;
-import net.rtccloud.sdk.event.call.ScreenShareInSizeEvent;
-import net.rtccloud.sdk.event.call.ScreenShareOutEvent;
-import net.rtccloud.sdk.event.call.VideoOutEvent;
-import net.rtccloud.sdk.event.call.StatusEvent;
-import net.rtccloud.sdk.event.call.VideoInSizeEvent;
-import net.rtccloud.sdk.event.global.AuthenticatedEvent;
-import net.rtccloud.sdk.view.ScreenShareInFrame;
-import net.rtccloud.sdk.view.VideoInFrame;
-import net.rtccloud.sdk.view.VideoOutPreviewFrame;
 
 /**
  * This {@link Fragment} will be displayed when a {@link Call} gets {@link CallStatus#ACTIVE}.<br />
@@ -69,8 +67,6 @@ public class CallFragment extends Fragment implements OnCallControlClickListener
 	/** Tag to identify the {@link CallFragment} */
 	public static final String TAG = CallFragment.class.getSimpleName();
 
-	/** The instance used to get the current call */
-	private RtccEngine mWeemo;
 	/** The call associated with this Fragment */
 	protected Call mCall;
 	/** Callback used to dispatch an ended call */
@@ -117,8 +113,7 @@ public class CallFragment extends Fragment implements OnCallControlClickListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		this.mWeemo = Rtcc.instance();
-		this.mCall = this.mWeemo.getCurrentCall();
+		this.mCall = Rtcc.instance().getCurrentCall();
 		if (this.mCallListener != null && (this.mCall == null || this.mCall.getStatus() == CallStatus.ENDED)) {
 			this.mCallListener.onHangup(this.mCall);
 			return;
@@ -289,7 +284,7 @@ public class CallFragment extends Fragment implements OnCallControlClickListener
 	}
 
 	@Override
-	public void onWeemoCallControlsClick(WeemoCallButton button) {
+	public void onCallControlsClick(CallButton button) {
 		if (this.mCallListener != null && (this.mCall == null || this.mCall.getStatus() == CallStatus.ENDED)) {
 			this.mCallListener.onHangup(this.mCall);
 			return;

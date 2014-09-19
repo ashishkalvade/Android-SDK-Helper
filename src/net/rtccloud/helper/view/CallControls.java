@@ -20,7 +20,7 @@ import net.rtccloud.sdk.Call;
 import net.rtccloud.sdk.Call.AudioRoute;
 
 /**
- * ViewGroup displaying call controls. To be notified of click event, simply register a {@link OnCallControlClickListener}. {@link WeemoCallButton}'c color can be set in xml with the
+ * ViewGroup displaying call controls. To be notified of click event, simply register a {@link OnCallControlClickListener}. {@link CallButton}'c color can be set in xml with the
  * <code>app:btn_color</code> attribute.
  * 
  * @author Simon Marquis <simon.marquis@sightcall.com>
@@ -52,7 +52,7 @@ public class CallControls extends LinearLayout implements OnClickListener {
 	 * 
 	 * @author Simon Marquis <simon.marquis@sightcall.com>
 	 */
-	public enum WeemoCallButton {
+	public enum CallButton {
 		/** SPEAKERS */
 		SPEAKERS,
 		/** MICRO */
@@ -198,7 +198,7 @@ public class CallControls extends LinearLayout implements OnClickListener {
 	}
 
 	/**
-	 * Register a callback to be invoked when a {@link WeemoCallButton} is clicked.
+	 * Register a callback to be invoked when a {@link CallButton} is clicked.
 	 * 
 	 * @param listener
 	 *            The callback that will be called
@@ -209,38 +209,38 @@ public class CallControls extends LinearLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		WeemoCallButton button = WeemoCallButton.UNKNOWN;
+		CallButton button = CallButton.UNKNOWN;
 		switch (v.getId()) {
 		case R.id.call_control_speakers:
-			button = WeemoCallButton.SPEAKERS;
+			button = CallButton.SPEAKERS;
 			break;
 		case R.id.call_control_micro:
-			button = WeemoCallButton.MICRO;
+			button = CallButton.MICRO;
 			break;
 		case R.id.call_control_video:
-			button = WeemoCallButton.VIDEO;
+			button = CallButton.VIDEO;
 			break;
 		case R.id.call_control_camera:
-			button = WeemoCallButton.SWITCH;
+			button = CallButton.SWITCH;
 			break;
 		case R.id.call_control_hangup:
-			button = WeemoCallButton.HANGUP;
+			button = CallButton.HANGUP;
 			break;
 		case R.id.call_control_fullscreen:
-			button = WeemoCallButton.FULLSCREEN;
+			button = CallButton.FULLSCREEN;
 			break;
 		case R.id.call_control_scale_type:
-			button = WeemoCallButton.SCALE;
+			button = CallButton.SCALE;
 			break;
 		case R.id.call_control_share:
-			button = WeemoCallButton.SHARE;
+			button = CallButton.SHARE;
 			break;
 		default:
 			throw new UnsupportedOperationException("Unknown button");
 		}
 
 		if (this.mCallControlsListener != null) {
-			this.mCallControlsListener.onWeemoCallControlsClick(button);
+			this.mCallControlsListener.onCallControlsClick(button);
 		}
 	}
 
