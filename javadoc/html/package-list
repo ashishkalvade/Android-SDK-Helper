@@ -1,7 +1,0 @@
-net.rtccloud.sdk
-net.rtccloud.sdk.event
-net.rtccloud.sdk.event.call
-net.rtccloud.sdk.event.global
-net.rtccloud.sdk.event.meetingpoint
-net.rtccloud.sdk.exception
-net.rtccloud.sdk.view

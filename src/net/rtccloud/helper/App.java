@@ -8,7 +8,8 @@ import net.rtccloud.helper.util.CustomReportSender;
 import net.rtccloud.helper.util.Scheme;
 import net.rtccloud.helper.util.Scheme.Parameter;
 import net.rtccloud.helper.util.Util;
-import net.rtccloud.sdk.L;
+import net.rtccloud.sdk.Logger;
+import net.rtccloud.sdk.Logger.LoggerLevel;
 import net.rtccloud.sdk.Rtcc;
 import net.rtccloud.sdk.RtccEngine.UserType;
 
@@ -97,7 +98,7 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		L.setLogLevel(L.VERBOSE);
+		Logger.setGlobalLevel(LoggerLevel.VERBOSE);
 
 		/* Initialize ACRA to report errors */
 		ACRA.init(this);

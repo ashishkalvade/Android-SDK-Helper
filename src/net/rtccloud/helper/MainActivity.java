@@ -258,9 +258,6 @@ public class MainActivity extends Activity implements OnLoginFragmentListener, O
 			if (Rtcc.instance() != null && !Rtcc.instance().isInBackground()) {
 				if (Rtcc.instance().getCurrentCall() == null) {
 					BackgroundTimer.startCountDown();
-				} else {
-					App.breadcrumb("RtccEngine.goToBackground()");
-					Rtcc.instance().goToBackground();
 				}
 			}
 		}
